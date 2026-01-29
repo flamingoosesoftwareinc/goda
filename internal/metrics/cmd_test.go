@@ -87,7 +87,7 @@ func buildGoda(t *testing.T) string {
 	dir := t.TempDir()
 	bin := filepath.Join(dir, "goda")
 
-	cmd := exec.Command("go", "build", "-o", bin, "github.com/loov/goda")
+	cmd := exec.Command("go", "build", "-o", bin, "github.com/flamingoosesoftwareinc/goda")
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatalf("building goda: %v\n%s", err, output)

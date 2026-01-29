@@ -10,15 +10,15 @@ import (
 
 	"github.com/google/subcommands"
 
-	"github.com/loov/goda/internal/cut"
-	"github.com/loov/goda/internal/exec"
-	"github.com/loov/goda/internal/graph"
-	"github.com/loov/goda/internal/list"
-	"github.com/loov/goda/internal/metrics"
-	"github.com/loov/goda/internal/pkgset"
-	"github.com/loov/goda/internal/tree"
-	"github.com/loov/goda/internal/weight"
-	"github.com/loov/goda/internal/weightdiff"
+	"github.com/flamingoosesoftwareinc/goda/internal/cut"
+	"github.com/flamingoosesoftwareinc/goda/internal/exec"
+	"github.com/flamingoosesoftwareinc/goda/internal/graph"
+	"github.com/flamingoosesoftwareinc/goda/internal/list"
+	"github.com/flamingoosesoftwareinc/goda/internal/metrics"
+	"github.com/flamingoosesoftwareinc/goda/internal/pkgset"
+	"github.com/flamingoosesoftwareinc/goda/internal/tree"
+	"github.com/flamingoosesoftwareinc/goda/internal/weight"
+	"github.com/flamingoosesoftwareinc/goda/internal/weightdiff"
 )
 
 func main() {
@@ -142,18 +142,18 @@ package expressions.
 
 # Example expressions:
 
-	github.com/loov/goda:import
-		all direct dependencies for the "github.com/loov/goda" package
+	github.com/flamingoosesoftwareinc/goda:import
+		all direct dependencies for the "github.com/flamingoosesoftwareinc/goda" package
 
-	shared(github.com/loov/goda/pkgset:all, github.com/loov/goda/templates:all)
+	shared(github.com/flamingoosesoftwareinc/goda/pkgset:all, github.com/flamingoosesoftwareinc/goda/templates:all)
 		packages directly or indirectly imported by both
-		"github.com/loov/goda/pkgset" and "github.com/loov/goda/templates"
+		"github.com/flamingoosesoftwareinc/goda/pkgset" and "github.com/flamingoosesoftwareinc/goda/templates"
 
-	github.com/loov/goda/...:all - golang.org/x/tools/...
+	github.com/flamingoosesoftwareinc/goda/...:all - golang.org/x/tools/...
 		all of goda's dependencies excluding golang.org/x/tools packages
 
-	reach(github.com/loov/goda/...:all, golang.org/x/tools/go/packages)
-		packages in github.com/loov/goda/ that use golang.org/x/tools/go/packages
+	reach(github.com/flamingoosesoftwareinc/goda/...:all, golang.org/x/tools/go/packages)
+		packages in github.com/flamingoosesoftwareinc/goda/ that use golang.org/x/tools/go/packages
 `
 }
 func (*ExprHelp) SetFlags(f *flag.FlagSet) {}

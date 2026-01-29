@@ -8,8 +8,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/loov/goda/internal/pkggraph"
-	"github.com/loov/goda/internal/pkgtree"
+	"github.com/flamingoosesoftwareinc/goda/internal/pkggraph"
+	"github.com/flamingoosesoftwareinc/goda/internal/pkgtree"
 )
 
 type Dot struct {

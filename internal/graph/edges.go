@@ -6,7 +6,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/loov/goda/internal/pkggraph"
+	"github.com/flamingoosesoftwareinc/goda/internal/pkggraph"
 )
 
 type Edges struct {

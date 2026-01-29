@@ -2,7 +2,7 @@
 
 ## Context
 
-Goda (`github.com/loov/goda`) is a Go dependency analysis and visualization tool. The `golang.org/x/tools` repo is also available locally as a reference. The goal is to extend goda with Robert Martin's package quality metrics and a novel structural coupling analysis for Go's implicit interface satisfaction.
+Goda (`github.com/flamingoosesoftwareinc/goda`, forked from `github.com/loov/goda`) is a Go dependency analysis and visualization tool. The `golang.org/x/tools` repo is also available locally as a reference. The goal is to extend goda with Robert Martin's package quality metrics and a novel structural coupling analysis for Go's implicit interface satisfaction.
 
 ## What Was Built
 

@@ -1,4 +1,4 @@
-module github.com/loov/goda
+module github.com/flamingoosesoftwareinc/goda
 
 go 1.25
 

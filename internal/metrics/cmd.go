@@ -11,9 +11,9 @@ import (
 
 	"github.com/google/subcommands"
 
-	"github.com/loov/goda/internal/pkggraph"
-	"github.com/loov/goda/internal/pkgset"
-	"github.com/loov/goda/internal/templates"
+	"github.com/flamingoosesoftwareinc/goda/internal/pkggraph"
+	"github.com/flamingoosesoftwareinc/goda/internal/pkgset"
+	"github.com/flamingoosesoftwareinc/goda/internal/templates"
 )
 
 var (
