@@ -169,6 +169,31 @@ goda metrics -sort ca ./...
 goda metrics -types -sort sca ./...
 ```
 
+### Investigating a Flagged Package
+
+The metrics table is a starting point, not a verdict. A high D or low A tells you where to look — not what to do. Once you have the initial numbers, investigate each package of concern before deciding whether action is needed.
+
+**Step 1: Understand what the package actually is.** Read the code. Is it a data definition package (structs, constants, enums)? A behavioral package (methods with logic, I/O, side effects)? A thin wrapper around an external library? The package's role determines whether the metric is meaningful.
+
+**Step 2: Check who depends on it and how.** Use `goda list` or grep for the import path. Look at what the dependents actually use — are they calling methods, reading struct fields, passing the type around in function signatures? A package with Ca=6 where all six dependents just read `.Name` and `.Key` fields is different from one where they call ten different methods.
+
+**Step 3: Look at the exported API surface.** What types, functions, and methods are exported? A concrete package with a large method surface that dependents call polymorphically is a real coupling concern. A concrete package that exports a struct with public fields and a couple of lookup functions is just a data definition — abstracting it buys nothing.
+
+**Step 4: Ask whether this package is likely to change.** The metrics measure the *cost* of change (how many things break), but the cost only matters if change actually happens. A stable data registry that hasn't changed in months and has no reason to change is fine at D=1.0. A Docker wrapper that evolves with infrastructure needs and has four dependents at D=0.25 is the more urgent concern.
+
+**Step 5: Render a verdict.** For each flagged package, decide:
+- **Leave it alone** — the metric is technically correct but the fix (extract interfaces, restructure) would be over-engineering given the package's role and change frequency
+- **Watch it** — the numbers aren't bad yet but the trend matters; revisit if Ca grows or the package starts changing
+- **Act on it** — the coupling is real, the package changes, and dependents would benefit from depending on an interface or a narrower contract
+
+**Example assessments:**
+
+A static configuration registry at D=1.00, Ca=6, A=0.00 looks alarming — stable, concrete, heavily depended upon. But if it exports one struct with data fields and a few lookup functions, there's no behavior to abstract. The dependents read fields; they don't need polymorphism. Verdict: leave it alone.
+
+A Docker client wrapper at D=0.25, Ca=4, A=0.00 looks less concerning by the numbers, but its dependents accept `*Client` as a concrete constructor parameter. That means tests need a real Docker daemon or build-tag hacks. The package wraps an external service that changes. Each dependent uses a different subset of its 10 methods. Verdict: dependents should define their own narrow interfaces for the methods they actually call — this is standard Go practice and it makes each consumer independently testable.
+
+The metrics don't tell you what's wrong. They tell you where to look, and they give you shared vocabulary for the review conversation: "this package is in the zone of pain" is more precise than "this feels too coupled."
+
 ## Graph example
 
 Here's an example output for:
