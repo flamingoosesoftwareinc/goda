@@ -48,7 +48,7 @@ func DeclsFromAst(f *ast.File) Decls {
 					stat.Type++
 					ts, ok := spec.(*ast.TypeSpec)
 					if ok {
-						if _, isIface := ts.Type.(*ast.InterfaceType); isIface {
+						if _, isIface := ts.Type.(*ast.InterfaceType); isIface && ts.Name.IsExported() {
 							stat.Interface++
 						}
 					}

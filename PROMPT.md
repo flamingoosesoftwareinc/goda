@@ -17,7 +17,7 @@ A new `goda metrics` subcommand and template fields on `goda list` computing fiv
 - **D** (Distance from Main Sequence): |A + I - 1|. Range 0..1. D=0 means the package sits on the ideal A+I=1 line.
 
 Design decisions:
-- Abstractness counts ALL interfaces (exported and unexported), not just exported.
+- Abstractness counts only exported interfaces. Unexported interfaces are internal contracts invisible to dependents and don't contribute to a package's public abstraction surface.
 - Ca/Ce coupling scope is all loaded packages, not just the query set.
 - Both a dedicated `goda metrics` subcommand (with sort, format, header flags) and template fields accessible via `goda list -f`.
 - Default sort is by D descending (worst packages first).
