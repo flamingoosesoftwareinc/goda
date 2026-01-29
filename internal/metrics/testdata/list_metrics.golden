@@ -1,0 +1,7 @@
+ID                    Ca   Ce   A      I      D
+testproject/app       0    2    0.00   1.00   0.00
+testproject/base      3    0    0.67   0.00   0.33
+testproject/compat    0    0    0.00   0.00   1.00
+testproject/handler   1    2    0.00   0.67   0.33
+testproject/service   2    2    0.50   0.50   0.00
+testproject/types     1    1    0.00   0.50   0.50

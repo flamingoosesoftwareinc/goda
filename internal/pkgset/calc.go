@@ -29,8 +29,20 @@ func Parse(_ context.Context, expr []string) (ast.Expr, error) {
 	return root, nil
 }
 
+// CalcOpts configures optional behaviors for Calc.
+type CalcOpts struct {
+	// TypesMode enables loading type information for structural coupling analysis.
+	TypesMode bool
+}
+
 // Calc parses expr and computes the set of packages it describes.
 func Calc(parentContext context.Context, expr []string) (Set, error) {
+	return CalcWithOpts(parentContext, expr, CalcOpts{})
+}
+
+// CalcWithOpts parses expr and computes the set of packages it describes,
+// with additional options.
+func CalcWithOpts(parentContext context.Context, expr []string, opts CalcOpts) (Set, error) {
 	if len(expr) == 0 {
 		expr = []string{"."}
 	}
@@ -286,6 +298,7 @@ func Calc(parentContext context.Context, expr []string) (Set, error) {
 	return eval(&Context{
 		Context:   parentContext,
 		Env:       Strings(os.Environ()),
+		TypesMode: opts.TypesMode,
 		Variables: map[string]Set{},
 	}, rootExpr)
 }

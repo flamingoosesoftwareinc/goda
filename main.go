@@ -14,6 +14,7 @@ import (
 	"github.com/loov/goda/internal/exec"
 	"github.com/loov/goda/internal/graph"
 	"github.com/loov/goda/internal/list"
+	"github.com/loov/goda/internal/metrics"
 	"github.com/loov/goda/internal/pkgset"
 	"github.com/loov/goda/internal/tree"
 	"github.com/loov/goda/internal/weight"
@@ -33,6 +34,7 @@ func main() {
 	cmds.Register(&weightdiff.Command{}, "")
 	cmds.Register(&graph.Command{}, "")
 	cmds.Register(&cut.Command{}, "")
+	cmds.Register(&metrics.Command{}, "")
 	cmds.Register(&ExprHelp{}, "")
 	cmds.Register(&FormatHelp{}, "")
 
@@ -246,11 +248,12 @@ declarations, which can be used as an approximation of the final
 binary size.
 
     type Decls struct {
-        Func  int64
-        Type  int64
-        Const int64
-        Var   int64
-        Other int64
+        Func      int64
+        Type      int64
+        Interface int64 // count of interface type declarations
+        Const     int64
+        Var       int64
+        Other     int64
     }
 
     type Tokens struct {
@@ -258,6 +261,25 @@ binary size.
         Comment int64
         Basic   int64
     }
+
+Robert Martin's package metrics are available on nodes (populated by
+"goda metrics" and "goda list"):
+
+    Ca  float64 // Afferent couplings: packages that depend on this package.
+    Ce  float64 // Efferent couplings: packages this package depends on.
+    A   float64 // Abstractness: interfaces / total types (0..1).
+    I   float64 // Instability: Ce / (Ce + Ca) (0..1).
+    D   float64 // Distance from the main sequence: |A + I - 1| (0..1).
+
+When -types flag is used, structural coupling metrics are also available:
+
+    SCa float64 // Packages whose types satisfy this package's interfaces (no import).
+    SCe float64 // Packages whose interfaces are satisfied by this package's types (no import).
+
+Example:
+
+    goda list -f "{{.ID}}\t{{printf \"%.2f\" .D}}" ./...
+    goda metrics -types ./...
 
 "goda cut" command additionally contains:
 

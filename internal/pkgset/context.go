@@ -35,6 +35,10 @@ type Context struct {
 	Tags    Strings
 	Env     Strings
 
+	// TypesMode enables loading type information (NeedTypes | NeedDeps).
+	// Required for structural coupling analysis.
+	TypesMode bool
+
 	Variables map[string]Set
 }
 
@@ -43,6 +47,7 @@ func (ctx Context) Clone() *Context {
 		Context:   ctx.Context,
 		Tags:      ctx.Tags.Clone(),
 		Env:       ctx.Env.Clone(),
+		TypesMode: ctx.TypesMode,
 		Variables: ctx.Variables,
 	}
 }
@@ -72,9 +77,13 @@ func (ctx *Context) Set(key, value string) {
 }
 
 func (ctx Context) Config() *packages.Config {
+	mode := packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles | packages.NeedImports | packages.NeedModule
+	if ctx.TypesMode {
+		mode |= packages.NeedTypes | packages.NeedDeps
+	}
 	config := &packages.Config{
 		Context: ctx.Context,
-		Mode:    packages.NeedName | packages.NeedFiles | packages.NeedCompiledGoFiles | packages.NeedImports | packages.NeedModule,
+		Mode:    mode,
 		Env:     ctx.Env,
 		Tests:   ctx.Tags.ValueOf("test") == "1",
 	}

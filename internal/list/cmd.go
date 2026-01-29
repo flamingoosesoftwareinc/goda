@@ -18,6 +18,7 @@ import (
 
 type Command struct {
 	printStandard bool
+	typesMode     bool
 
 	noAlign bool
 	header  string
@@ -37,6 +38,7 @@ func (*Command) Usage() string {
 
 func (cmd *Command) SetFlags(f *flag.FlagSet) {
 	f.BoolVar(&cmd.printStandard, "std", false, "print std packages")
+	f.BoolVar(&cmd.typesMode, "types", false, "enable structural coupling analysis (SCa/SCe)")
 
 	f.BoolVar(&cmd.noAlign, "noalign", false, "disable aligning tabs")
 	f.StringVar(&cmd.header, "h", "", "header for the table\nautomatically derives from format, when empty, use \"-\" to skip")
@@ -54,16 +56,25 @@ func (cmd *Command) Execute(ctx context.Context, f *flag.FlagSet, _ ...any) subc
 		go pkgset.LoadStd()
 	}
 
-	result, err := pkgset.Calc(ctx, f.Args())
+	result, err := pkgset.CalcWithOpts(ctx, f.Args(), pkgset.CalcOpts{
+		TypesMode: cmd.typesMode,
+	})
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err.Error())
 		return subcommands.ExitFailure
 	}
+
+	allPkgs := result
 	if !cmd.printStandard {
 		result = pkgset.Subtract(result, pkgset.Std())
 	}
 
 	graph := pkggraph.From(result)
+	graph.ComputeMetrics(allPkgs)
+
+	if cmd.typesMode {
+		graph.ComputeStructuralCoupling()
+	}
 
 	var w io.Writer = os.Stdout
 	if !cmd.noAlign {
